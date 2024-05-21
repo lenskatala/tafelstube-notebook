@@ -11,13 +11,8 @@ book:
   # this section determines which files will be added to the book as chapters
   chapters:
     - index.qmd
-    - impressum.ipynb
-    - text.ipynb
-    - paintings.ipynb
-    - datavis.ipynb
     - rittersaal.ipynb
-    - painting-collection.ipynb
-  repo-url: https://github.com/NFDI4Culture/CPS-Demo
+  repo-url: https://github.com/NFDI4Culture/section-notebook
   repo-actions: [edit]
   downloads: [pdf,docx,epub]
   cover-image: images/fmd10005860a.jpg

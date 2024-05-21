@@ -3,25 +3,6 @@
 Ein Katalog mit Kunstwerken aus der CbDD-Sammlung. Textteil: [6e73f774-4b7f-4e37-937b-e11cc35c5bc8](https://www.deckenmalerei.eu/42d06165-58e7-4653-bfe4-3d5f7091fc33#6e73f774-4b7f-4e37-937b-e11cc35c5bc8)
 
 Großer Saal (Rittersaal) [Raum]<br/>
-Name: Großer Saal (Rittersaal)<br/>
-ID:	15685f4a-3727-4110-8967-1d8287431997<br/>
-Typ: Raum<br/>
-Länge (m): 36.4<br/>
-Breite (m):	11.7<br/>
-Höhe (m): 8.25<br/>
-Funktion [Raum]: Saal -> Hauptsaal<br/>
-Datierung [Raum]: 1601-1605<br/>
-hat Auftraggeber: Wolfgang II., Hohenlohe-Weikersheim, Graf [Person]<br/>
-hat Auftraggeber: Carl Ludwig, Hohenlohe-Weikersheim, Graf [Person]<br/>
-hat Teil: Malerei des Barock [Malerei]<br/>
-hat Teil: Malerei der Renaissance [Malerei]<br/>
-hat Stuckateur:	Schmidt, Gerhard [Person]<br/>
-hat Stuckateur:	Limmerich, Christoph [Person]<br/>
-hat Bildhauer: Juncker, Michael [Person]<br/>
-ist dokumentiert in: Der Große Saal (Rittersaal) [Textteil]<br/>
-ist Teil von: Erschließungsraumfolgen [Raumfolge]<br/>
-Erstellung des Datensatzes:	2020-05-19, 11:18<br/>
-letzte Bearbeitung:	2023-10-16, 14:28
 
 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://licensebuttons.net/l/by-nc-nd/4.0/88x31.png" /></a> This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International License</a>.
 
