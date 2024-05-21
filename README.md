@@ -1,6 +1,6 @@
 # Computational Publishing Service Demo
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/NFDI4Culture/CPS-Demo?quickstart=1)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/NFDI4Culture/section-notebook?quickstart=1)
 
 Codespace is GitHub's virtual machine service - with 60 hours and 15 GB per month on their free plan. With the link above you can run this demo in the browser. Codespaces are being used so that time consuming local installs are avoided. The Codespace instance is your own virtual machine from which you can push commits back to a repository and will maintain its state on closing. See your codespaces [here](https://github.com/codespaces) and read support docs [here](https://docs.github.com/en/codespaces).
 
