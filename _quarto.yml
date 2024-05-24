@@ -12,7 +12,7 @@ book:
   chapters:
     - index.qmd
     - section.ipynb
-  repo-url: https://github.com/NFDI4Culture/section-notebook
+  repo-url: https://github.com/lenskatala/section-notebook
   repo-actions: [edit]
   downloads: [pdf,docx,epub]
   cover-image: images/fmd10005860a.jpg
