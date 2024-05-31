@@ -5,17 +5,18 @@ project:
 # Quarto options for books
 # https://quarto.org/docs/reference/projects/books.html
 book:
-  title: "Weikersheim, Residenzschloss"
-  author: "Team Redaktion"
-  date: "2024-03-22"
+  title: "Die Tafelstube"
+  author: "Lena-Marie Hoppe"
+  date: "2024-05-31"
   # this section determines which files will be added to the book as chapters
   chapters:
     - index.qmd
     - section.ipynb
+    #Rename notebook to Tafelstube/room you are doing
   repo-url: https://github.com/lenskatala/section-notebook
-  repo-actions: [edit]
+  repo-actions: [edit]                    #[issue] zum Fragestellen
   downloads: [pdf,docx,epub]
-  cover-image: images/fmd10005860a.jpg
+  cover-image: images/fmd10005852a.jpg    #austauschen
 
 # Quarto allows commenting using either Hypothesis or Utterances
 # https://quarto.org/docs/reference/projects/books.html#comments
@@ -29,7 +30,7 @@ format:
     number-sections: false
     # Quarto allows a number of pre-packaged themes for the HTML version
     # You can choose between them using the documentation at https://quarto.org/docs/output-formats/html-themes.html
-    theme: simplex
+    theme: litera
   # options for PDF output 
   # https://quarto.org/docs/reference/formats/pdf.html
   pdf:
