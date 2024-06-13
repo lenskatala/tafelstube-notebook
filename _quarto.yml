@@ -12,6 +12,7 @@ book:
   chapters:
     - index.qmd
     - tafelstube.ipynb
+    - belagerungsszenen.ipynb
     #Rename notebook to Tafelstube/room you are doing
   repo-url: https://github.com/lenskatala/tafelstube-notebook
   repo-actions: [edit]                    #[issue] zum Fragestellen
