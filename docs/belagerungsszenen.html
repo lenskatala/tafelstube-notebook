@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Die Tafelstube – ``` {.python .cell-code}</title>
+<title>Die Tafelstube - Belagerungsszenen des Langen Türkenkriegs an der Decke</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -121,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./belagerungsszenen.html"><span class="chapter-title">belagerungsszenen.html</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./belagerungsszenen.html"><span class="chapter-title">Belagerungsszenen des Langen Türkenkriegs an der Decke</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -174,7 +174,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Katalog zur Ausstellung: Die Tafelstube (Belagerungsszenen des Langen Türkenkriegs an der Decke)</span></a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Katalog zur Ausstellung: Die Tafelstube</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -184,17 +184,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./belagerungsszenen.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">belagerungsszenen.html</span></a>
+  <a href="./belagerungsszenen.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Belagerungsszenen des Langen Türkenkriegs an der Decke</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./belagerung_01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">belagerung_01.html</span></a>
+  <a href="./belagerung_01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Belagerungsszene I: Eroberung der Festung Tottis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./belagerung_02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">belagerung_02.html</span></a>
+  <a href="./belagerung_02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Belagerungsszene I: Eroberung der Festung Tottis</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -247,11 +247,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <a href="./belagerung_12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">belagerung_12.html</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./programm_synthese_tafelstube.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">programm_synthese_tafelstube.html</span></a>
-  </div>
-</li>
     </ul>
     </div>
 </nav>
@@ -265,7 +260,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">``` {.python .cell-code}</span></h1>
+<h1 class="title"><span class="chapter-title">Belagerungsszenen des Langen Türkenkriegs an der Decke</span></h1>
 </div>
 
 
@@ -282,191 +277,152 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div id="cell-0" class="cell">
-<p>title: “Die Tafelstube” jupyter: python3 code-fold: true execute: echo: true output: asis</p>
-<hr>
-<pre><code>:::
-
-
-::: {#cell-1 .cell}
-``` {.python .cell-code}
-from datetime import datetime
-import sys
-import time
-from SPARQLWrapper import SPARQLWrapper, JSON
-import requests
-from PIL import Image
-import html
-
-endpoint_url = "https://computational-publishing-service.wikibase.cloud/query/sparql"
-#where the sparql queries come from
-
-query_txt = """PREFIX cps: &lt;https://computational-publishing-service.wikibase.cloud/entity/&gt;
-PREFIX cpss: &lt;https://computational-publishing-service.wikibase.cloud/entity/statement/&gt;
-PREFIX cpsv: &lt;https://computational-publishing-service.wikibase.cloud/value/&gt;
-PREFIX cpspt: &lt;https://computational-publishing-service.wikibase.cloud/prop/direct/&gt;
-PREFIX cpsp: &lt;https://computational-publishing-service.wikibase.cloud/prop/&gt;
-PREFIX cpsps: &lt;https://computational-publishing-service.wikibase.cloud/prop/statement/&gt;
-PREFIX cpspq: &lt;https://computational-publishing-service.wikibase.cloud/prop/qualifier/&gt;
-
-SELECT ?textItem ?kuratorLabel ?textUrl
-WHERE
-{
-  &lt;placeholder&gt;
-  ?textItem cpsp:P46 ?kuratorStatement. 
-  ?kuratorStatement cpsps:P46 ?kuratorItem.   
-  ?kuratorItem rdfs:label ?kuratorLabel.
-  ?textItem cpsp:P57 ?urlstatement. 
-  ?urlstatement cpsps:P57 ?textUrl. 
-}"""
-
-query_img = """PREFIX cps: &lt;https://computational-publishing-service.wikibase.cloud/entity/&gt;
-PREFIX cpss: &lt;https://computational-publishing-service.wikibase.cloud/entity/statement/&gt;
-PREFIX cpsv: &lt;https://computational-publishing-service.wikibase.cloud/value/&gt;
-PREFIX cpspt: &lt;https://computational-publishing-service.wikibase.cloud/prop/direct/&gt;
-PREFIX cpsp: &lt;https://computational-publishing-service.wikibase.cloud/prop/&gt;
-PREFIX cpsps: &lt;https://computational-publishing-service.wikibase.cloud/prop/statement/&gt;
-PREFIX cpspq: &lt;https://computational-publishing-service.wikibase.cloud/prop/qualifier/&gt;
-
-SELECT DISTINCT ?itemLabel ?itemDescr ?imgItem ?imgUrl ?publishDate 
-WHERE
-{
-  ?imgItem cpsp:P107 ?urlStatement. 
-  ?urlStatement cpsps:P107 ?imgUrl. 
-  ?imgItem cpsp:P60 ?dateStatement.         
-  ?dateStatement cpsps:P60 ?publishDate.
-  ?imgItem cpsp:P6 ?partOfStatement.
-  ?partOfStatement cpsps:P6 ?partOfItem.
-  &lt;placeholder&gt; 
-  SERVICE wikibase:label {
-      bd:serviceParam wikibase:language "de,en".
-      ?imgItem rdfs:label ?itemLabel.
-      ?imgItem schema:description ?itemDescr.
-    }
-}"""
-query_graph = """PREFIX cps: &lt;https://computational-publishing-service.wikibase.cloud/entity/&gt;
-PREFIX cpss: &lt;https://computational-publishing-service.wikibase.cloud/entity/statement/&gt;
-PREFIX cpsv: &lt;https://computational-publishing-service.wikibase.cloud/value/&gt;
-PREFIX cpspt: &lt;https://computational-publishing-service.wikibase.cloud/prop/direct/&gt;
-PREFIX cpsp: &lt;https://computational-publishing-service.wikibase.cloud/prop/&gt;
-PREFIX cpsps: &lt;https://computational-publishing-service.wikibase.cloud/prop/statement/&gt;
-PREFIX cpspq: &lt;https://computational-publishing-service.wikibase.cloud/prop/qualifier/&gt;
-
-SELECT ?x ?y
-WHERE
-{
-  ?a cpsp:P2 ?c.
-  ?c cpsps:P2 ?d.                       #also quasi überall wo sparql ist, muss was angepasst werden
-  ?a rdfs:label ?x.
-  ?d rdfs:label ?y.
-
-}LIMIT 1"""
-
-query_graph2 = """
-SELECT ?a ?b ?c
-WHERE
-{
-  ?a rdfs:label ?c
-}LIMIT 100"""
-
-
-def run_query(endpoint_url, query):
-    user_agent = "WDQS-example Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
-    # TODO adjust user agent; see https://w.wiki/CX6
-    sparql = SPARQLWrapper(endpoint_url, agent=user_agent)
-    sparql.setQuery(query)
-    sparql.setMethod("POST") #this NEEDS to be added to get results (not included in the wikibase python example code)
-    sparql.setReturnFormat(JSON)
-    return sparql.query().convert()
-
-def get_text(textitem_id):
-    q = ""
-    if textitem_id:
-        q = query_txt.replace("&lt;placeholder&gt;", "cps:"+textitem_id+" cpsp:P46 ?kuratorStatement.")
-    else:
-        q = query_txt.replace("&lt;placeholder&gt;","")
-
-    results_txt = run_query(endpoint_url, q)
-    for item in results_txt["results"]["bindings"]:
-        # print(item)
-        print('Wikibase link: ' + '[' + item['textItem']['value'] + ']' + '(' + item['textItem']['value'] + ')' + '\n')
-        print('Kurator: ' + item['kuratorLabel']['value'] + '\n')
-        headers = {'User-Agent': 'Ex_Books_conference_bot/0.0 (https://github.com/SimonXIX/Experimental_Books_workshop; ad7588@coventry.ac.uk)'}
-        r = requests.get(item['textUrl']['value'], headers=headers, stream=True)
-        text = str(r.content)
-        text = text.replace("ä","&amp;auml;")
-        text = text.replace("Ä","&amp;Auml;")
-        text = text.replace("ö","&amp;ouml;")
-        text = text.replace("Ö","&amp;Ouml;")
-        text = text.replace("ü","&amp;uuml;")
-        text = text.replace("Ü","&amp;Uuml;")
-        text = text.replace("ß","&amp;szlig;")
-        text = text.replace('\\n',"&lt;br&gt;")
-        text = str(text)
-        text = text.removeprefix("b'&lt;!DOCTYPE html&gt;").removesuffix("'")
-        print(text)
-
-def get_delay(date):
-    try:
-        date = datetime.datetime.strptime(date, '%a, %d %b %Y %H:%M:%S GMT')
-        timeout = int((date - datetime.datetime.now()).total_seconds())
-    except ValueError:
-        timeout = int(date)
-    return timeout
-
-def fetch_image_by_url(url, headers):
-    r = requests.get(url, headers=headers, stream=True)
-    if r.status_code == 200:
-        im = Image.open(r.raw)
-        return im
-    if r.status_code == 500:
-        return None
-    if r.status_code == 403:
-        return None
-    if r.status_code == 429:
-        timeout = get_delay(r.headers['retry-after'])
-        print('Timeout {} m {} s'.format(timeout // 60, timeout % 60))
-        time.sleep(timeout)
-        fetch_image_by_url(url, headers)
-
-def get_img(partOfItem_id):
-    q = ""
-    if partOfItem_id:
-        q = query_img.replace("&lt;placeholder&gt;", "?partOfStatement cpsps:P6 cps:"+partOfItem_id+".")
-    else:
-        q = query_img.replace("&lt;placeholder&gt;","")
-    results_img = run_query(endpoint_url, q)
-    for item in results_img["results"]["bindings"]:    
-      #print(item)
-      print('Wikibase link: ' + '[' + item['imgItem']['value'] + ']' + '(' + item['imgItem']['value'] + ')' + '\n')
-      print('Title: ' + item['itemLabel']['value'] + '\n')
-      print('Year: ' + item['publishDate']['value'] + '\n')
-      print('Description: ' + html.unescape(item['itemDescr']['value']) + '\n')
-
-      # get image from image URL and display resized version
-      image_url=item['imgUrl']['value']
-      headers = {'User-Agent': 'Ex_Books_conference_bot/0.0 (https://github.com/SimonXIX/Experimental_Books_workshop; ad7588@coventry.ac.uk)'}
-      im = fetch_image_by_url(image_url, headers)
-      im.thumbnail((500, 500), Image.Resampling.LANCZOS)
-      display(im)
-      print('\n\n')
-
-def get_graph():
-    import VizKG.visualize as vkg
-    results_graph1 = run_query(endpoint_url, query_graph)
-    #print(results_graph1)
-    #print('---')
-    results_graph2 = run_query(endpoint_url, query_graph2)
-    #print(results_graph2)
-
-    chart = vkg(sparql_query=query_graph2, sparql_service_url=endpoint_url, chart='wordcloud')
-    chart.plot()
-</code></pre>
-</div>
-<div id="cell-2" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> funktionen <span class="im">import</span> <span class="op">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<details class="code-fold">
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>get_text(<span class="st">"Q278"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Belagerungsszenen des Langen Türkenkrieges</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+</details>
+<p>Wikibase link: <a href="https://computational-publishing-service.wikibase.cloud/entity/Q278">https://computational-publishing-service.wikibase.cloud/entity/Q278</a></p>
+<p>Kurator: Seeger, Ulrike</p>
+<br>
+
+<br>
+<meta charset="utf-8">
+<br>
+<meta content="text">
+<br>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<br>
+
+<br>
+
+<br>
+
+<br>
+<h2 class="anchored">
+Belagerungsszenen des Langen Tan der Decke
+</h2>
+<br>
+<h3 class="anchored">
+Zuweisung der Gem4lde in die einstige Tafelstube
+</h3>
+<br>
+<p>
+<br> Die einstige Deckenzier der Tafelstube ist den Inventaren, die ja lediglich die mobilen Einrichtungsgegenst4nde auff, nicht zu entnehmen. Einer Haustradition von Schloss Weikersheim zufolge waren an der Decke ursprjene 12 gro9fformatigen Belagerungsszenen angebracht, die sich heute in musealer Aufstellung teilweise im Flur vor dem einstigen Appartement Graf Wolfgangs im Kbefinden.[1] Bei der Unterteilung des Raumes 1837 wurden sie abgenommen und tauchten im Schloss 1946 wieder auf.[2] Ihre Anzahl, ihre Aufteilung in vier schmale und acht breite Bilder sowie wie die exakten Ma9fe[3] passen sehr gut zu den Gefachen der Balkendecke. Es besteht also kein Anlass, an dieser Haustradition zu zweifeln.<br>
+</p>
+<br>
+<p>
+<br> <br>
+</p>
+<br>
+<p>
+<br> <br>
+</p>
+<br>
+<h3 class="anchored">
+Urheberschaft und Datierung der Gem4lde
+</h3>
+<br>
+<p>
+<br> Nahezu alle Gem4lde sind stilistisch Balthasar Katzenberger zuzuschreiben. Ein Vertrag wie der zu den Deckengem4lden des Rittersaals hat sich nicht erhalten, sodass sie nicht genau datiert sind. Sie entstanden jedoch vermutlich sofort im Anschluss an die im November 1602 quittierten Deckengem4lde des Saals, also von 1603 bis 1604. Bei der sp4testen dargestellten Belagerung von 1604 handelt es sich um einen Nachz. Ihr Duktus ist nicht der von Katzenberger, was sich insbesondere an den Wolkenformationen zeigt, die entgegen Katzenbergers Gepflogenheit wei9f konturiert sind. M6glicherweise ersetzte das Gem4lde ein anderes Bild und wurde zu einem Zeitpunkt gew, als Katzenberger nicht zur Verfstand. Der Anlass fdie nachtr4gliche Bestellung war der Tod von Graf Ludwig Kasimir bei der dargestellten Belagerung von Gran im Jahr 1604, an die das Gem4lde erinnert.<br>
+</p>
+<br>
+<h3 class="anchored">
+Komposition und Darstellungsmodus der Gem4lde
+</h3>
+<br>
+<p>
+<br> Die hochrechteckigen Belagerungsszenen folgen im Aufbau prinzipiell den achteckigen Jagdgem4lden im Saal. Im Vordergrund hat Katzenberger ein Getinszeniert, das sich am unteren Bildrand abspielt und dessen Protagonisten von beiden Seiten ins Bild reiten oder treten. Seitlich wird das Geschehen von hohen Repoussoir-B4ume gerahmt, die sich am oberen Bildrand durch die Beschriftung der Gem4lde mit dunklen Buchstaben vor blauem Himmel zu einer ovalen Rahmung zusammenschlie9fen. Im Mittel- und Hintergrund schilderte Katzenberger in weitl4ufiger Landschaft die Belagerung einer Festung. Rings um die Festung stehen die Zelte der Belagerer, entzsich Scharmund hin und wieder auch kleinere Schlachten.<br>
+</p>
+<br>
+<h3 class="anchored">
+Thema, Vorlagen, Auswahl und Konzeption des Zyklus
+</h3>
+<br>
+<p>
+<br> Die Gem4lde zeigen Belagerungen ungarischer Festungen, die sich w4hrend des Langen Tergaben. Der Lange Tbegann 1593 zwischen dem Osmanischen Reich und den Habsburgern nachdem es schon vorher auf beiden Seiten zu Grenzverletzungen gekommen war.[4] Es handelte sich um einen Festungskrieg, bei dem die im Anschluss an die osmanische Belagerung Wiens im Jahr 1529 auf beiden Seiten ausgebauten Festungen wechselseitig belagert wurden. Beendet wurde der Krieg erst 1606 mit dem Frieden von Zsitvatorok. Die in Weikersheim dargestellten Belagerungen beginnen angeblich schon 1590, sp4testens jedoch 1594 und reichen bis in das Jahr 1604.<br>
+</p>
+<br>
+<p>
+<br> Der Lange Tmit seinen vielen Belagerungen bestimmte bereits das das Programm des inneren Ostportals des Rittersaals. Dieses Portal fnach Ansicht der Autorin nicht von der Tafelstube in den Saal, sondern vom Saal in die Tafelstube. Es bereitete den Besucher des Saals thematisch auf das Bildprogramm der Tafelstube vor, zumal das Portal und die Deckengem4lde der Tafelstube zur gleichen Zeit entstanden. Der Stuckateur Gerhard Schmidt schuf sein 1603 signiertes und datiertes Portal im Saal, w4hrend Katzenberger seine Gem4lde in der Werkstatt malte.<br>
+</p>
+<br>
+<p>
+<br> Als Vorlagen fdie Belagerungsszenen im Hintergrund dienten Kupferstiche, die einer ausf, 1602 in Nerschienenen Chronik den Tbeigebunden waren.[5] Verfasser des Werkes 9eChronologia oder Historische Beschreibung aller Kriegsemporungen und Bel4gerungen der St4tt und Vestungen, auch Scharmund Schlachten, so in Ober- und Under-Ungarn, auch Sibenb, mit dem Tvon A. 1395 bi9f auff gegenwertige Zeit gedenckhwgeschehen 9c[6] war Hieronymus Oertl (Ortelius), der in Wien als kaiserlicher Notar wegen seiner protestantischen Gesinnung 1580 in Ungnade gefallen war und sich danach in Nniederlie9f.[7] Die Anregung zu dem Werk ging von seinem Schwager, dem NKupferstecher und Verleger Johann Sibmacher aus. Sibmacher zeichnete die Belagerungsszenen nach Ortelius Vorgaben und stach sie in Kupfer.[8]<br>
+</p>
+<br>
+<p>
+<br> Die insgesamt 28 Kupfer wurden in der deutschsprachigen Legende in ihrem Sujet genau benannt und mit dem Jahr der Belagerung versehen. Katzenberger diese Beischriften buchstabengetreu fseine Deckengem4lde. Aufgrund der sehr genauen 9cbernahmen in Wort und Bild kann man davon ausgehen, dass Ortelius Chronik Graf Wolfgang im Jahr ihres Erscheinens 1602 vorlag. Ausgew4hlt aus den 28 Kupfern wurden Belagerungsaktionen sowohl der Kaiserlichen als auch der Osmanen. Harald Dr6s, der sich bislang am ausfmit den Weikersheimer Belagerungsszenen auseinandergesetzt hat und dem wertvolle Hinweise zu verdanken sind,[9] vermutete deshalb sicher zurecht, dass die Auswahl der Szenen davon bestimmt war, dass Mitglieder des Hauses Hohenlohe beteiligt waren. Die folgende Beschreibung der Bilder best4tigt diese Vermutung. Die sp4teste dargestellte Belagerung von Gran (Eszergom), bei der der Sohn Ludwig Kasimir zu Tode kam,[10] bezieht sich als ein Art Memorialbild auf dessen Tod. Auch dieses tragische Ereignis wurde dem Besucher schon angek, indem im Durchgang zwischen Saal und Tafelstube die Beweinung des toten Adonis durch Venus und Amor dargestellt wurde.<br>
+</p>
+<br>
+<p>
+<br> Drei der in Weikersheim dargestellten Belagerungen lagen sp4ter als das Erscheinungsjahr der Chronik. Sie wurden hinzuerfunden und weisen deutliche Schw4chen in der Schilderung des Hintergrunds auf. Die drei jeweils an der Donau stattgefundenen Aktionen wurden aus Landkarten und Belagerungen Sibmachers versatzstkompiliert. Da die Gem4lde keinerlei Anhaltspunkte zu ihrer ursprAnordnung preisgeben, folgt ihre nachfolgende Nummerierung der Chronologie der dargestellten Belagerungen. Sie findet sich in der gleichen Reihenfolge zusammen mit den genauen Ma9fen bei Harald Dr6s im Band der Inschriften des ehemaligen Landkreises Mergentheim.[11]<br>
+</p>
+<br>
+<h3 class="anchored">
+Rekonstruktion der einstigen Anordnung
+</h3>
+<br>
+<p>
+<br> Bei der Rekonstruktion der Decke, die Jan Lutteroth miterarbeitet und graphisch umgesetzt hat, wurde die Reihenfolge der durch keinerlei Bild- oder Schriftquellen Anbringung ebenfalls gem9f der Chronologie gew4hlt. Die Geschichte beginnt in angenommener Leserichtung von links nach rechts fden Eintretenden links oben mit dem geheimnisvollen Nachtbild der Belagerung von Totis im Jahr 1590 (Belagerung I). Bei der Rekonstruktion der in vier Register Szenen musste lediglich im dritten Register einmal die Chronologie verlassen werden, da die Belagerung der Stadt Waitzen im Jahr 1597 (Belagerung VII) als schmales Bildformat nicht links au9fen, sondern erst in der Mitte platziert werden konnte. Sie wird nun von den Belagerungen von Raab 1598, wiederum einem effektvollen Nachtbild (Belagerung VIII), und der Belagerung von Ofen ebenfalls im Jahr 1598 (Belagerung IX) flankiert.<br>
+</p>
+<br>
+<p>
+<br> Die drei Belagerungen, an denen S6hne teilgenommen hatten (Belagerung X, XI, XII) stehen bei der gew4hlten Anordnung am Ende der Tafelstube. Die drei darunterliegenden Fenster er6ffnen den Blick auf die Stadt sdes Marktplatzes. Das besonders wichtige Gem4lde mit dem bei der Belagerung von Gran (Eszergom) 1604 get6teten Ludwig Kasimir (Belagerung XII) kommt als letztes der Reihe rechts oben so zu stehen, dass Ludwig Kasimir mit seinem Pferd Richtung Kirche reitet, wo er beigesetzt wurde. Der trauernden Gr4fin wauf dem Gem4lde ebenfalls der Weg zur Kirche gewiesen.<br>
+</p>
+<br>
+<p>
+<br> [1] Merten, Weikersheim, o. J., S. 40. Trentin-Meyer, Georg Friedrich von Hohenlohe, 2019, S. 90 spricht versehentlich von 13 Gem4lden.<br>
+</p>
+<br>
+<p>
+<br> [2] Freeden, Kamin, 1950, S. 142.<br>
+</p>
+<br>
+<p>
+<br> [3] Die Ma9fe bei Dr6s, Inschriften Mergentheim, 2002, S. 248. Ebd., S. 249 die bislang ausfAuseinandersetzung mit den Gem4lden.<br>
+</p>
+<br>
+<p>
+<br> [4] Zum Langen T: Niederkorn, Langer T, 1993.<br>
+</p>
+<br>
+<p>
+<br> [5] Diese wichtige Vorlage bereits bei Fandrey, Weikersheim, 2010, S. 60.<br>
+</p>
+<br>
+<p>
+<br> [6] Ortelius, Chronologia, 1602.<br>
+</p>
+<br>
+<p>
+<br> [7] Mummenhoff, Ernst, “Oertl, Hieronymus” in: Allgemeine Deutsche Biographie 24 (1887), S. 445-446 [Online-Version]; URL: https://www.deutsche-biographie.de/pnd128534958.html#adbcontent.<br>
+</p>
+<br>
+<p>
+<br> [8] Ebd. Au9ferdem Ortelius, Chronologia, 1602, 9eAd Lectorem9c.<br>
+</p>
+<br>
+<p>
+<br> [9] Dr6s, Inschriften Mergentheim, 2002, S. 248.<br>
+</p>
+<br>
+<p>
+<br> [10] Dr6s, Inschriften Mergentheim, 2002, S. 248.<br>
+</p>
+<br>
+<p>
+<br> [11] Dr6s, Inschriften Mergentheim, 2002, Nr. 366.<br>
+</p>
+<br>
+
+<br>
+
+<p><br></p>
 
 
 
@@ -887,8 +843,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./belagerung_01.html" class="pagination-link" aria-label="belagerung_01.html">
-        <span class="nav-page-text"><span class="chapter-title">belagerung_01.html</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./belagerung_01.html" class="pagination-link" aria-label="Belagerungsszene I: Eroberung der Festung Tottis">
+        <span class="nav-page-text"><span class="chapter-title">Belagerungsszene I: Eroberung der Festung Tottis</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

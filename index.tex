@@ -189,9 +189,8 @@
 \mainmatter
 \bookmarksetup{startatroot}
 
-\chapter{Katalog zur Ausstellung: Die Tafelstube (Belagerungsszenen des
-Langen Türkenkriegs an der
-Decke)}\label{katalog-zur-ausstellung-die-tafelstube-belagerungsszenen-des-langen-tuxfcrkenkriegs-an-der-decke}
+\chapter{Katalog zur Ausstellung: Die
+Tafelstube}\label{katalog-zur-ausstellung-die-tafelstube}
 
 Ein Katalog mit Kunstwerken aus der CbDD-Sammlung. Textteil:
 \href{https://www.deckenmalerei.eu/42d06165-58e7-4653-bfe4-3d5f7091fc33\#6e73f774-4b7f-4e37-937b-e11cc35c5bc8}{6e73f774-4b7f-4e37-937b-e11cc35c5bc8}
@@ -600,191 +599,14 @@ Jagdzyklus an der Decke des Saals.
 
 \bookmarksetup{startatroot}
 
-\chapter{```}\label{section}
+\chapter{Belagerungsszenen des Langen Türkenkriegs an der
+Decke}\label{belagerungsszenen-des-langen-tuxfcrkenkriegs-an-der-decke}
 
-title: ``Die Tafelstube'' jupyter: python3 code-fold: true execute:
-echo: true output: asis
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\begin{verbatim}
-:::
-
-
-::: {.cell}
-``` {.python .cell-code}
-from datetime import datetime
-import sys
-import time
-from SPARQLWrapper import SPARQLWrapper, JSON
-import requests
-from PIL import Image
-import html
-
-endpoint_url = "https://computational-publishing-service.wikibase.cloud/query/sparql"
-#where the sparql queries come from
-
-query_txt = """PREFIX cps: <https://computational-publishing-service.wikibase.cloud/entity/>
-PREFIX cpss: <https://computational-publishing-service.wikibase.cloud/entity/statement/>
-PREFIX cpsv: <https://computational-publishing-service.wikibase.cloud/value/>
-PREFIX cpspt: <https://computational-publishing-service.wikibase.cloud/prop/direct/>
-PREFIX cpsp: <https://computational-publishing-service.wikibase.cloud/prop/>
-PREFIX cpsps: <https://computational-publishing-service.wikibase.cloud/prop/statement/>
-PREFIX cpspq: <https://computational-publishing-service.wikibase.cloud/prop/qualifier/>
-
-SELECT ?textItem ?kuratorLabel ?textUrl
-WHERE
-{
-  <placeholder>
-  ?textItem cpsp:P46 ?kuratorStatement. 
-  ?kuratorStatement cpsps:P46 ?kuratorItem.   
-  ?kuratorItem rdfs:label ?kuratorLabel.
-  ?textItem cpsp:P57 ?urlstatement. 
-  ?urlstatement cpsps:P57 ?textUrl. 
-}"""
-
-query_img = """PREFIX cps: <https://computational-publishing-service.wikibase.cloud/entity/>
-PREFIX cpss: <https://computational-publishing-service.wikibase.cloud/entity/statement/>
-PREFIX cpsv: <https://computational-publishing-service.wikibase.cloud/value/>
-PREFIX cpspt: <https://computational-publishing-service.wikibase.cloud/prop/direct/>
-PREFIX cpsp: <https://computational-publishing-service.wikibase.cloud/prop/>
-PREFIX cpsps: <https://computational-publishing-service.wikibase.cloud/prop/statement/>
-PREFIX cpspq: <https://computational-publishing-service.wikibase.cloud/prop/qualifier/>
-
-SELECT DISTINCT ?itemLabel ?itemDescr ?imgItem ?imgUrl ?publishDate 
-WHERE
-{
-  ?imgItem cpsp:P107 ?urlStatement. 
-  ?urlStatement cpsps:P107 ?imgUrl. 
-  ?imgItem cpsp:P60 ?dateStatement.         
-  ?dateStatement cpsps:P60 ?publishDate.
-  ?imgItem cpsp:P6 ?partOfStatement.
-  ?partOfStatement cpsps:P6 ?partOfItem.
-  <placeholder> 
-  SERVICE wikibase:label {
-      bd:serviceParam wikibase:language "de,en".
-      ?imgItem rdfs:label ?itemLabel.
-      ?imgItem schema:description ?itemDescr.
-    }
-}"""
-query_graph = """PREFIX cps: <https://computational-publishing-service.wikibase.cloud/entity/>
-PREFIX cpss: <https://computational-publishing-service.wikibase.cloud/entity/statement/>
-PREFIX cpsv: <https://computational-publishing-service.wikibase.cloud/value/>
-PREFIX cpspt: <https://computational-publishing-service.wikibase.cloud/prop/direct/>
-PREFIX cpsp: <https://computational-publishing-service.wikibase.cloud/prop/>
-PREFIX cpsps: <https://computational-publishing-service.wikibase.cloud/prop/statement/>
-PREFIX cpspq: <https://computational-publishing-service.wikibase.cloud/prop/qualifier/>
-
-SELECT ?x ?y
-WHERE
-{
-  ?a cpsp:P2 ?c.
-  ?c cpsps:P2 ?d.                       #also quasi überall wo sparql ist, muss was angepasst werden
-  ?a rdfs:label ?x.
-  ?d rdfs:label ?y.
-
-}LIMIT 1"""
-
-query_graph2 = """
-SELECT ?a ?b ?c
-WHERE
-{
-  ?a rdfs:label ?c
-}LIMIT 100"""
-
-
-def run_query(endpoint_url, query):
-    user_agent = "WDQS-example Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
-    # TODO adjust user agent; see https://w.wiki/CX6
-    sparql = SPARQLWrapper(endpoint_url, agent=user_agent)
-    sparql.setQuery(query)
-    sparql.setMethod("POST") #this NEEDS to be added to get results (not included in the wikibase python example code)
-    sparql.setReturnFormat(JSON)
-    return sparql.query().convert()
-
-def get_text(textitem_id):
-    q = ""
-    if textitem_id:
-        q = query_txt.replace("<placeholder>", "cps:"+textitem_id+" cpsp:P46 ?kuratorStatement.")
-    else:
-        q = query_txt.replace("<placeholder>","")
-
-    results_txt = run_query(endpoint_url, q)
-    for item in results_txt["results"]["bindings"]:
-        # print(item)
-        print('Wikibase link: ' + '[' + item['textItem']['value'] + ']' + '(' + item['textItem']['value'] + ')' + '\n')
-        print('Kurator: ' + item['kuratorLabel']['value'] + '\n')
-        headers = {'User-Agent': 'Ex_Books_conference_bot/0.0 (https://github.com/SimonXIX/Experimental_Books_workshop; ad7588@coventry.ac.uk)'}
-        r = requests.get(item['textUrl']['value'], headers=headers, stream=True)
-        text = str(r.content)
-        text = text.replace("ä","&auml;")
-        text = text.replace("Ä","&Auml;")
-        text = text.replace("ö","&ouml;")
-        text = text.replace("Ö","&Ouml;")
-        text = text.replace("ü","&uuml;")
-        text = text.replace("Ü","&Uuml;")
-        text = text.replace("ß","&szlig;")
-        text = text.replace('\\n',"<br>")
-        text = str(text)
-        text = text.removeprefix("b'<!DOCTYPE html>").removesuffix("'")
-        print(text)
-
-def get_delay(date):
-    try:
-        date = datetime.datetime.strptime(date, '%a, %d %b %Y %H:%M:%S GMT')
-        timeout = int((date - datetime.datetime.now()).total_seconds())
-    except ValueError:
-        timeout = int(date)
-    return timeout
-
-def fetch_image_by_url(url, headers):
-    r = requests.get(url, headers=headers, stream=True)
-    if r.status_code == 200:
-        im = Image.open(r.raw)
-        return im
-    if r.status_code == 500:
-        return None
-    if r.status_code == 403:
-        return None
-    if r.status_code == 429:
-        timeout = get_delay(r.headers['retry-after'])
-        print('Timeout {} m {} s'.format(timeout // 60, timeout % 60))
-        time.sleep(timeout)
-        fetch_image_by_url(url, headers)
-
-def get_img(partOfItem_id):
-    q = ""
-    if partOfItem_id:
-        q = query_img.replace("<placeholder>", "?partOfStatement cpsps:P6 cps:"+partOfItem_id+".")
-    else:
-        q = query_img.replace("<placeholder>","")
-    results_img = run_query(endpoint_url, q)
-    for item in results_img["results"]["bindings"]:    
-      #print(item)
-      print('Wikibase link: ' + '[' + item['imgItem']['value'] + ']' + '(' + item['imgItem']['value'] + ')' + '\n')
-      print('Title: ' + item['itemLabel']['value'] + '\n')
-      print('Year: ' + item['publishDate']['value'] + '\n')
-      print('Description: ' + html.unescape(item['itemDescr']['value']) + '\n')
-
-      # get image from image URL and display resized version
-      image_url=item['imgUrl']['value']
-      headers = {'User-Agent': 'Ex_Books_conference_bot/0.0 (https://github.com/SimonXIX/Experimental_Books_workshop; ad7588@coventry.ac.uk)'}
-      im = fetch_image_by_url(image_url, headers)
-      im.thumbnail((500, 500), Image.Resampling.LANCZOS)
-      display(im)
-      print('\n\n')
-
-def get_graph():
-    import VizKG.visualize as vkg
-    results_graph1 = run_query(endpoint_url, query_graph)
-    #print(results_graph1)
-    #print('---')
-    results_graph2 = run_query(endpoint_url, query_graph2)
-    #print(results_graph2)
-
-    chart = vkg(sparql_query=query_graph2, sparql_service_url=endpoint_url, chart='wordcloud')
-    chart.plot()
-\end{verbatim}
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{from}\NormalTok{ funktionen }\ImportTok{import} \OperatorTok{*}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -792,6 +614,276 @@ def get_graph():
 \CommentTok{\#Belagerungsszenen des Langen Türkenkrieges}
 \end{Highlighting}
 \end{Shaded}
+
+Wikibase link:
+\url{https://computational-publishing-service.wikibase.cloud/entity/Q278}
+
+Kurator: Seeger, Ulrike
+
+Belagerungsszenen des Langen T\xc3\xbcrkenkriegs an der Decke
+
+Zuweisung der Gem\xc3\xa4lde in die einstige Tafelstube
+
+Die einstige Deckenzier der Tafelstube ist den Inventaren, die ja
+lediglich die mobilen Einrichtungsgegenst\xc3\xa4nde auff\xc3\xbchren,
+nicht zu entnehmen. Einer Haustradition von Schloss Weikersheim zufolge
+waren an der Decke urspr\xc3\xbcnglich jene 12 gro\xc3\x9fformatigen
+Belagerungsszenen angebracht, die sich heute in musealer Aufstellung
+teilweise im Flur vor dem einstigen Appartement Graf Wolfgangs im
+K\xc3\xbcchenbau befinden.{[}1{]} Bei der Unterteilung des Raumes 1837
+wurden sie abgenommen und tauchten im Schloss 1946 wieder auf.{[}2{]}
+Ihre Anzahl, ihre Aufteilung in vier schmale und acht breite Bilder
+sowie wie die exakten Ma\xc3\x9fe{[}3{]} passen sehr gut zu den Gefachen
+der Balkendecke. Es besteht also kein Anlass, an dieser Haustradition zu
+zweifeln.
+
+Urheberschaft und Datierung der Gem\xc3\xa4lde
+
+Nahezu alle Gem\xc3\xa4lde sind stilistisch Balthasar Katzenberger
+zuzuschreiben. Ein Vertrag wie der zu den Deckengem\xc3\xa4lden des
+Rittersaals hat sich nicht erhalten, sodass sie nicht genau datiert
+sind. Sie entstanden jedoch vermutlich sofort im Anschluss an die im
+November 1602 quittierten Deckengem\xc3\xa4lde des Saals, also von 1603
+bis 1604. Bei der sp\xc3\xa4testen dargestellten Belagerung von 1604
+handelt es sich um einen Nachz\xc3\xbcgler. Ihr Duktus ist nicht der von
+Katzenberger, was sich insbesondere an den Wolkenformationen zeigt, die
+entgegen Katzenbergers Gepflogenheit wei\xc3\x9f konturiert sind.
+M\xc3\xb6glicherweise ersetzte das Gem\xc3\xa4lde ein anderes Bild und
+wurde zu einem Zeitpunkt gew\xc3\xbcnscht, als Katzenberger nicht zur
+Verf\xc3\xbcgung stand. Der Anlass f\xc3\xbcr die nachtr\xc3\xa4gliche
+Bestellung war der Tod von Graf Ludwig Kasimir bei der dargestellten
+Belagerung von Gran im Jahr 1604, an die das Gem\xc3\xa4lde erinnert.
+
+Komposition und Darstellungsmodus der Gem\xc3\xa4lde
+
+Die hochrechteckigen Belagerungsszenen folgen im Aufbau prinzipiell den
+achteckigen Jagdgem\xc3\xa4lden im Saal. Im Vordergrund hat Katzenberger
+ein Get\xc3\xbcmmel inszeniert, das sich am unteren Bildrand abspielt
+und dessen Protagonisten von beiden Seiten ins Bild reiten oder treten.
+Seitlich wird das Geschehen von hohen Repoussoir-B\xc3\xa4ume gerahmt,
+die sich am oberen Bildrand durch die Beschriftung der Gem\xc3\xa4lde
+mit dunklen Buchstaben vor blauem Himmel zu einer ovalen Rahmung
+zusammenschlie\xc3\x9fen. Im Mittel- und Hintergrund schilderte
+Katzenberger in weitl\xc3\xa4ufiger Landschaft die Belagerung einer
+Festung. Rings um die Festung stehen die Zelte der Belagerer,
+entz\xc3\xbcnden sich Scharm\xc3\xbctzel und hin und wieder auch
+kleinere Schlachten.
+
+Thema, Vorlagen, Auswahl und Konzeption des Zyklus
+
+Die Gem\xc3\xa4lde zeigen Belagerungen ungarischer Festungen, die sich
+w\xc3\xa4hrend des Langen T\xc3\xbcrkenkriegs ergaben. Der Lange
+T\xc3\xbcrkenkrieg begann 1593 zwischen dem Osmanischen Reich und den
+Habsburgern nachdem es schon vorher auf beiden Seiten zu
+Grenzverletzungen gekommen war.{[}4{]} Es handelte sich um einen
+Festungskrieg, bei dem die im Anschluss an die osmanische Belagerung
+Wiens im Jahr 1529 auf beiden Seiten ausgebauten Festungen wechselseitig
+belagert wurden. Beendet wurde der Krieg erst 1606 mit dem Frieden von
+Zsitvatorok. Die in Weikersheim dargestellten Belagerungen beginnen
+angeblich schon 1590, sp\xc3\xa4testens jedoch 1594 und reichen bis in
+das Jahr 1604.
+
+Der Lange T\xc3\xbcrkenkrieg mit seinen vielen Belagerungen bestimmte
+bereits das das Programm des inneren Ostportals des Rittersaals. Dieses
+Portal f\xc3\xbchrte nach Ansicht der Autorin nicht von der Tafelstube
+in den Saal, sondern vom Saal in die Tafelstube. Es bereitete den
+Besucher des Saals thematisch auf das Bildprogramm der Tafelstube vor,
+zumal das Portal und die Deckengem\xc3\xa4lde der Tafelstube zur
+gleichen Zeit entstanden. Der Stuckateur Gerhard Schmidt schuf sein 1603
+signiertes und datiertes Portal im Saal, w\xc3\xa4hrend Katzenberger
+seine Gem\xc3\xa4lde in der Werkstatt malte.
+
+Als Vorlagen f\xc3\xbcr die Belagerungsszenen im Hintergrund dienten
+Kupferstiche, die einer ausf\xc3\xbchrlichen, 1602 in
+N\xc3\xbcrnberg erschienenen Chronik \xc3\xbcber den
+T\xc3\xbcrkenkrieg beigebunden waren.{[}5{]} Verfasser des Werkes
+\xe2\x80\x9eChronologia oder Historische Beschreibung aller
+Kriegsemporungen und Bel\xc3\xa4gerungen der St\xc3\xa4tt und Vestungen,
+auch Scharm\xc3\xbctzeln und Schlachten, so in Ober- und Under-Ungarn,
+auch Sibenb\xc3\xbcrgen, mit dem T\xc3\xbcrcken von A. 1395 bi\xc3\x9f
+auff gegenwertige Zeit gedenckhw\xc3\xbcrdig geschehen
+\xe2\x80\xa6\xe2\x80\x9c{[}6{]} war Hieronymus Oertl (Ortelius), der in
+Wien als kaiserlicher Notar wegen seiner protestantischen Gesinnung 1580
+in Ungnade gefallen war und sich danach in
+N\xc3\xbcrnberg niederlie\xc3\x9f.{[}7{]} Die Anregung zu dem Werk ging
+von seinem Schwager, dem N\xc3\xbcrnberger Kupferstecher und Verleger
+Johann Sibmacher aus. Sibmacher zeichnete die Belagerungsszenen nach
+Ortelius Vorgaben und stach sie in Kupfer.{[}8{]}
+
+Die insgesamt 28 Kupfer wurden in der deutschsprachigen Legende in ihrem
+Sujet genau benannt und mit dem Jahr der Belagerung versehen.
+Katzenberger \xc3\xbcbernahm diese Beischriften buchstabengetreu
+f\xc3\xbcr seine Deckengem\xc3\xa4lde. Aufgrund der sehr genauen
+\xc3\x9cbernahmen in Wort und Bild kann man davon ausgehen, dass
+Ortelius\xe2\x80\x98 Chronik Graf Wolfgang im Jahr ihres Erscheinens
+1602 vorlag. Ausgew\xc3\xa4hlt aus den 28 Kupfern wurden
+Belagerungsaktionen sowohl der Kaiserlichen als auch der Osmanen. Harald
+Dr\xc3\xb6s, der sich bislang am ausf\xc3\xbchrlichsten mit den
+Weikersheimer Belagerungsszenen auseinandergesetzt hat und dem wertvolle
+Hinweise zu verdanken sind,{[}9{]} vermutete deshalb sicher zurecht,
+dass die Auswahl der Szenen davon bestimmt war, dass Mitglieder des
+Hauses Hohenlohe beteiligt waren. Die folgende Beschreibung der Bilder
+best\xc3\xa4tigt diese Vermutung. Die sp\xc3\xa4teste dargestellte
+Belagerung von Gran (Eszergom), bei der der Sohn Ludwig Kasimir zu Tode
+kam,{[}10{]} bezieht sich als ein Art Memorialbild auf dessen Tod. Auch
+dieses tragische Ereignis wurde dem Besucher schon angek\xc3\xbcndigt,
+indem im Durchgang zwischen Saal und Tafelstube die Beweinung des toten
+Adonis durch Venus und Amor dargestellt wurde.
+
+Drei der in Weikersheim dargestellten Belagerungen lagen sp\xc3\xa4ter
+als das Erscheinungsjahr der Chronik. Sie wurden hinzuerfunden und
+weisen deutliche Schw\xc3\xa4chen in der Schilderung des Hintergrunds
+auf. Die drei jeweils an der Donau stattgefundenen Aktionen wurden aus
+Landkarten und Belagerungen Sibmachers
+versatzst\xc3\xbcckhaft kompiliert. Da die Gem\xc3\xa4lde keinerlei
+Anhaltspunkte zu ihrer urspr\xc3\xbcnglichen Anordnung preisgeben, folgt
+ihre nachfolgende Nummerierung der Chronologie der dargestellten
+Belagerungen. Sie findet sich in der gleichen Reihenfolge zusammen mit
+den genauen Ma\xc3\x9fen bei Harald Dr\xc3\xb6s im Band der Inschriften
+des ehemaligen Landkreises Mergentheim.{[}11{]}
+
+Rekonstruktion der einstigen Anordnung
+
+Bei der Rekonstruktion der Decke, die Jan Lutteroth miterarbeitet und
+graphisch umgesetzt hat, wurde die Reihenfolge der durch keinerlei Bild-
+oder Schriftquellen \xc3\xbcberlieferten Anbringung ebenfalls
+gem\xc3\xa4\xc3\x9f der Chronologie gew\xc3\xa4hlt. Die Geschichte
+beginnt in angenommener Leserichtung von links nach rechts
+f\xc3\xbcr den Eintretenden links oben mit dem geheimnisvollen Nachtbild
+der Belagerung von Totis im Jahr 1590 (Belagerung I). Bei der
+Rekonstruktion der in vier Register \xc3\xbcbereinanderliegenden Szenen
+musste lediglich im dritten Register einmal die Chronologie verlassen
+werden, da die Belagerung der Stadt Waitzen im Jahr 1597 (Belagerung
+VII) als schmales Bildformat nicht links au\xc3\x9fen, sondern erst in
+der Mitte platziert werden konnte. Sie wird nun von den Belagerungen von
+Raab 1598, wiederum einem effektvollen Nachtbild (Belagerung VIII), und
+der Belagerung von Ofen ebenfalls im Jahr 1598 (Belagerung IX)
+flankiert.
+
+Die drei Belagerungen, an denen S\xc3\xb6hne teilgenommen hatten
+(Belagerung X, XI, XII) stehen bei der gew\xc3\xa4hlten Anordnung am
+Ende der Tafelstube. Die drei darunterliegenden Fenster er\xc3\xb6ffnen
+den Blick auf die Stadt s\xc3\xbcdlich des Marktplatzes. Das besonders
+wichtige Gem\xc3\xa4lde mit dem bei der Belagerung von Gran (Eszergom)
+1604 get\xc3\xb6teten Ludwig Kasimir (Belagerung XII) kommt als letztes
+der Reihe rechts oben so zu stehen, dass Ludwig Kasimir mit seinem Pferd
+Richtung Kirche reitet, wo er beigesetzt wurde. Der trauernden
+Gr\xc3\xa4fin w\xc3\xbcrde auf dem Gem\xc3\xa4lde ebenfalls der Weg zur
+Kirche gewiesen.
+
+{[}1{]} Merten, Weikersheim, o. J., S. 40. Trentin-Meyer, Georg
+Friedrich von Hohenlohe, 2019, S. 90 spricht versehentlich von 13
+Gem\xc3\xa4lden.
+
+{[}2{]} Freeden, Kamin, 1950, S. 142.
+
+{[}3{]} Die Ma\xc3\x9fe bei Dr\xc3\xb6s, Inschriften Mergentheim, 2002,
+S. 248. Ebd., S. 249 die bislang
+ausf\xc3\xbchrlichste Auseinandersetzung mit den Gem\xc3\xa4lden.
+
+{[}4{]} Zum Langen T\xc3\xbcrkenkrieg: Niederkorn, Langer
+T\xc3\xbcrkenkrieg, 1993.
+
+{[}5{]} Diese wichtige Vorlage bereits bei Fandrey, Weikersheim, 2010,
+S. 60.
+
+{[}6{]} Ortelius, Chronologia, 1602.
+
+{[}7{]} Mummenhoff, Ernst, ``Oertl, Hieronymus'' in: Allgemeine Deutsche
+Biographie 24 (1887), S. 445-446 {[}Online-Version{]}; URL:
+https://www.deutsche-biographie.de/pnd128534958.html\#adbcontent.
+
+{[}8{]} Ebd. Au\xc3\x9ferdem Ortelius, Chronologia, 1602, \xe2\x80\x9eAd
+Lectorem\xe2\x80\x9c.
+
+{[}9{]} Dr\xc3\xb6s, Inschriften Mergentheim, 2002, S.
+248\xe2\x80\x93249.
+
+{[}10{]} Dr\xc3\xb6s, Inschriften Mergentheim, 2002, S.
+248\xe2\x80\x93250.
+
+{[}11{]} Dr\xc3\xb6s, Inschriften Mergentheim, 2002, Nr. 366.
+
+\bookmarksetup{startatroot}
+
+\chapter{Belagerungsszene I: Eroberung der Festung
+Tottis}\label{belagerungsszene-i-eroberung-der-festung-tottis}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{from}\NormalTok{ funktionen }\ImportTok{import} \OperatorTok{*}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{get\_text(}\StringTok{"Q252"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Wikibase link:
+\url{https://computational-publishing-service.wikibase.cloud/entity/Q252}
+
+Kurator: Seeger, Ulrike
+
+Belagerung I: \xe2\x80\x9eVestung Tottis, wie die von den Christen bei
+der Nacht erobert worden, 1590\xe2\x80\x9c
+
+Breites Format. Vorne rechts ins Bild hineinreitende Reiter mit
+gro\xc3\x9fen Fahnen. Im Hintergrund die ungarische Festung Totis (Tata)
+nach dem Vorbild von Sibmachers Kupferstich, der allerdings eine
+Eroberung durch die Christen aus dem Jahr 1597 wiedergibt. Die sehr
+dunkle Szenerie wird von zwei Laternen sp\xc3\xa4rlich erleuchtet. Da
+Totis nicht 1590, sondern 1597 und 1598 durch die Christen erobert
+wurde, und zudem zu den zeitlich als n\xc3\xa4chste dargestellten
+Belagerungen eine Zeitspanne von vier Jahren liegt, kann es gut sein,
+dass der Jahreszahl 1590 ein Versehen zugrunde liegt.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{get\_img(}\StringTok{"Q238"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Wikibase link:
+\url{https://computational-publishing-service.wikibase.cloud/entity/Q265}
+
+Title: Eroberung der Festung Tottis -- Gesamtansicht
+
+Year: 2018
+
+Description: Teil von: Wanddekoration des Flurs \& Raum 73a
+Belagerungsszenen und Türkenschlachten; Balthasar Kazenberger, Maler -
+Weikersheim, Schloss Weikersheim, Flur \& Raum 73a - 1603-1604
+
+Wikibase link:
+\url{https://computational-publishing-service.wikibase.cloud/entity/Q265}
+
+Title: Eroberung der Festung Tottis -- Gesamtansicht
+
+Year: 2018-01-01T00:00:00Z
+
+Description: Teil von: Wanddekoration des Flurs \& Raum 73a
+Belagerungsszenen und Türkenschlachten; Balthasar Kazenberger, Maler -
+Weikersheim, Schloss Weikersheim, Flur \& Raum 73a - 1603-1604
+
+\includegraphics{belagerung_01_files/figure-pdf/cell-4-output-2.png}
+\includegraphics{belagerung_01_files/figure-pdf/cell-4-output-3.png}
+
+\bookmarksetup{startatroot}
+
+\chapter{Belagerungsszene I: Eroberung der Festung
+Tottis}\label{belagerungsszene-i-eroberung-der-festung-tottis-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{from}\NormalTok{ funktionen }\ImportTok{import} \OperatorTok{*}
+\end{Highlighting}
+\end{Shaded}
+
+\bookmarksetup{startatroot}
+
+\chapter{}\label{section}
 
 \bookmarksetup{startatroot}
 
@@ -828,22 +920,6 @@ def get_graph():
 \bookmarksetup{startatroot}
 
 \chapter{}\label{section-9}
-
-\bookmarksetup{startatroot}
-
-\chapter{}\label{section-10}
-
-\bookmarksetup{startatroot}
-
-\chapter{}\label{section-11}
-
-\bookmarksetup{startatroot}
-
-\chapter{}\label{section-12}
-
-\bookmarksetup{startatroot}
-
-\chapter{}\label{section-13}
 
 
 \backmatter
