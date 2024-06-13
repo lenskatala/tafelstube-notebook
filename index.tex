@@ -205,182 +205,6 @@ Attribution-NonCommercial-NoDerivs 4.0 International License.
 
 \chapter{Die Tafelstube}\label{die-tafelstube}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\ImportTok{from}\NormalTok{ datetime }\ImportTok{import}\NormalTok{ datetime}
-\ImportTok{import}\NormalTok{ sys}
-\ImportTok{import}\NormalTok{ time}
-\ImportTok{from}\NormalTok{ SPARQLWrapper }\ImportTok{import}\NormalTok{ SPARQLWrapper, JSON}
-\ImportTok{import}\NormalTok{ requests}
-\ImportTok{from}\NormalTok{ PIL }\ImportTok{import}\NormalTok{ Image}
-\ImportTok{import}\NormalTok{ html}
-
-\NormalTok{endpoint\_url }\OperatorTok{=} \StringTok{"https://computational{-}publishing{-}service.wikibase.cloud/query/sparql"}
-\CommentTok{\#where the sparql queries come from}
-
-\NormalTok{query\_txt }\OperatorTok{=} \StringTok{"""PREFIX cps: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/entity/\textgreater{}}
-\StringTok{PREFIX cpss: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/entity/statement/\textgreater{}}
-\StringTok{PREFIX cpsv: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/value/\textgreater{}}
-\StringTok{PREFIX cpspt: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/prop/direct/\textgreater{}}
-\StringTok{PREFIX cpsp: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/prop/\textgreater{}}
-\StringTok{PREFIX cpsps: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/prop/statement/\textgreater{}}
-\StringTok{PREFIX cpspq: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/prop/qualifier/\textgreater{}}
-
-\StringTok{SELECT ?textItem ?kuratorLabel ?textUrl}
-\StringTok{WHERE}
-\StringTok{\{}
-\StringTok{  \textless{}placeholder\textgreater{}}
-\StringTok{  ?textItem cpsp:P46 ?kuratorStatement. }
-\StringTok{  ?kuratorStatement cpsps:P46 ?kuratorItem.   }
-\StringTok{  ?kuratorItem rdfs:label ?kuratorLabel.}
-\StringTok{  ?textItem cpsp:P57 ?urlstatement. }
-\StringTok{  ?urlstatement cpsps:P57 ?textUrl. }
-\StringTok{\}"""}
-
-\NormalTok{query\_img }\OperatorTok{=} \StringTok{"""PREFIX cps: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/entity/\textgreater{}}
-\StringTok{PREFIX cpss: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/entity/statement/\textgreater{}}
-\StringTok{PREFIX cpsv: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/value/\textgreater{}}
-\StringTok{PREFIX cpspt: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/prop/direct/\textgreater{}}
-\StringTok{PREFIX cpsp: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/prop/\textgreater{}}
-\StringTok{PREFIX cpsps: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/prop/statement/\textgreater{}}
-\StringTok{PREFIX cpspq: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/prop/qualifier/\textgreater{}}
-
-\StringTok{SELECT DISTINCT ?itemLabel ?itemDescr ?imgItem ?imgUrl ?publishDate }
-\StringTok{WHERE}
-\StringTok{\{}
-\StringTok{  ?imgItem cpsp:P107 ?urlStatement. }
-\StringTok{  ?urlStatement cpsps:P107 ?imgUrl. }
-\StringTok{  ?imgItem cpsp:P60 ?dateStatement.         }
-\StringTok{  ?dateStatement cpsps:P60 ?publishDate.}
-\StringTok{  ?imgItem cpsp:P6 ?partOfStatement.}
-\StringTok{  ?partOfStatement cpsps:P6 ?partOfItem.}
-\StringTok{  \textless{}placeholder\textgreater{} }
-\StringTok{  SERVICE wikibase:label \{}
-\StringTok{      bd:serviceParam wikibase:language "de,en".}
-\StringTok{      ?imgItem rdfs:label ?itemLabel.}
-\StringTok{      ?imgItem schema:description ?itemDescr.}
-\StringTok{    \}}
-\StringTok{\}"""}
-\NormalTok{query\_graph }\OperatorTok{=} \StringTok{"""PREFIX cps: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/entity/\textgreater{}}
-\StringTok{PREFIX cpss: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/entity/statement/\textgreater{}}
-\StringTok{PREFIX cpsv: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/value/\textgreater{}}
-\StringTok{PREFIX cpspt: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/prop/direct/\textgreater{}}
-\StringTok{PREFIX cpsp: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/prop/\textgreater{}}
-\StringTok{PREFIX cpsps: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/prop/statement/\textgreater{}}
-\StringTok{PREFIX cpspq: \textless{}https://computational{-}publishing{-}service.wikibase.cloud/prop/qualifier/\textgreater{}}
-
-\StringTok{SELECT ?x ?y}
-\StringTok{WHERE}
-\StringTok{\{}
-\StringTok{  ?a cpsp:P2 ?c.}
-\StringTok{  ?c cpsps:P2 ?d.                       \#also quasi überall wo sparql ist, muss was angepasst werden}
-\StringTok{  ?a rdfs:label ?x.}
-\StringTok{  ?d rdfs:label ?y.}
-
-\StringTok{\}LIMIT 1"""}
-
-\NormalTok{query\_graph2 }\OperatorTok{=} \StringTok{"""}
-\StringTok{SELECT ?a ?b ?c}
-\StringTok{WHERE}
-\StringTok{\{}
-\StringTok{  ?a rdfs:label ?c}
-\StringTok{\}LIMIT 100"""}
-
-
-\KeywordTok{def}\NormalTok{ run\_query(endpoint\_url, query):}
-\NormalTok{    user\_agent }\OperatorTok{=} \StringTok{"WDQS{-}example Python/}\SpecialCharTok{\%s}\StringTok{.}\SpecialCharTok{\%s}\StringTok{"} \OperatorTok{\%}\NormalTok{ (sys.version\_info[}\DecValTok{0}\NormalTok{], sys.version\_info[}\DecValTok{1}\NormalTok{])}
-    \CommentTok{\# }\AlertTok{TODO}\CommentTok{ adjust user agent; see https://w.wiki/CX6}
-\NormalTok{    sparql }\OperatorTok{=}\NormalTok{ SPARQLWrapper(endpoint\_url, agent}\OperatorTok{=}\NormalTok{user\_agent)}
-\NormalTok{    sparql.setQuery(query)}
-\NormalTok{    sparql.setMethod(}\StringTok{"POST"}\NormalTok{) }\CommentTok{\#this NEEDS to be added to get results (not included in the wikibase python example code)}
-\NormalTok{    sparql.setReturnFormat(JSON)}
-    \ControlFlowTok{return}\NormalTok{ sparql.query().convert()}
-
-\KeywordTok{def}\NormalTok{ get\_text(textitem\_id):}
-\NormalTok{    q }\OperatorTok{=} \StringTok{""}
-    \ControlFlowTok{if}\NormalTok{ textitem\_id:}
-\NormalTok{        q }\OperatorTok{=}\NormalTok{ query\_txt.replace(}\StringTok{"\textless{}placeholder\textgreater{}"}\NormalTok{, }\StringTok{"cps:"}\OperatorTok{+}\NormalTok{textitem\_id}\OperatorTok{+}\StringTok{" cpsp:P46 ?kuratorStatement."}\NormalTok{)}
-    \ControlFlowTok{else}\NormalTok{:}
-\NormalTok{        q }\OperatorTok{=}\NormalTok{ query\_txt.replace(}\StringTok{"\textless{}placeholder\textgreater{}"}\NormalTok{,}\StringTok{""}\NormalTok{)}
-
-\NormalTok{    results\_txt }\OperatorTok{=}\NormalTok{ run\_query(endpoint\_url, q)}
-    \ControlFlowTok{for}\NormalTok{ item }\KeywordTok{in}\NormalTok{ results\_txt[}\StringTok{"results"}\NormalTok{][}\StringTok{"bindings"}\NormalTok{]:}
-        \CommentTok{\# print(item)}
-        \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}Wikibase link: \textquotesingle{}} \OperatorTok{+} \StringTok{\textquotesingle{}[\textquotesingle{}} \OperatorTok{+}\NormalTok{ item[}\StringTok{\textquotesingle{}textItem\textquotesingle{}}\NormalTok{][}\StringTok{\textquotesingle{}value\textquotesingle{}}\NormalTok{] }\OperatorTok{+} \StringTok{\textquotesingle{}]\textquotesingle{}} \OperatorTok{+} \StringTok{\textquotesingle{}(\textquotesingle{}} \OperatorTok{+}\NormalTok{ item[}\StringTok{\textquotesingle{}textItem\textquotesingle{}}\NormalTok{][}\StringTok{\textquotesingle{}value\textquotesingle{}}\NormalTok{] }\OperatorTok{+} \StringTok{\textquotesingle{})\textquotesingle{}} \OperatorTok{+} \StringTok{\textquotesingle{}}\CharTok{\textbackslash{}n}\StringTok{\textquotesingle{}}\NormalTok{)}
-        \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}Kurator: \textquotesingle{}} \OperatorTok{+}\NormalTok{ item[}\StringTok{\textquotesingle{}kuratorLabel\textquotesingle{}}\NormalTok{][}\StringTok{\textquotesingle{}value\textquotesingle{}}\NormalTok{] }\OperatorTok{+} \StringTok{\textquotesingle{}}\CharTok{\textbackslash{}n}\StringTok{\textquotesingle{}}\NormalTok{)}
-\NormalTok{        headers }\OperatorTok{=}\NormalTok{ \{}\StringTok{\textquotesingle{}User{-}Agent\textquotesingle{}}\NormalTok{: }\StringTok{\textquotesingle{}Ex\_Books\_conference\_bot/0.0 (https://github.com/SimonXIX/Experimental\_Books\_workshop; ad7588@coventry.ac.uk)\textquotesingle{}}\NormalTok{\}}
-\NormalTok{        r }\OperatorTok{=}\NormalTok{ requests.get(item[}\StringTok{\textquotesingle{}textUrl\textquotesingle{}}\NormalTok{][}\StringTok{\textquotesingle{}value\textquotesingle{}}\NormalTok{], headers}\OperatorTok{=}\NormalTok{headers, stream}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
-\NormalTok{        text }\OperatorTok{=} \BuiltInTok{str}\NormalTok{(r.content)}
-\NormalTok{        text }\OperatorTok{=}\NormalTok{ text.replace(}\StringTok{"ä"}\NormalTok{,}\StringTok{"\&auml;"}\NormalTok{)}
-\NormalTok{        text }\OperatorTok{=}\NormalTok{ text.replace(}\StringTok{"Ä"}\NormalTok{,}\StringTok{"\&Auml;"}\NormalTok{)}
-\NormalTok{        text }\OperatorTok{=}\NormalTok{ text.replace(}\StringTok{"ö"}\NormalTok{,}\StringTok{"\&ouml;"}\NormalTok{)}
-\NormalTok{        text }\OperatorTok{=}\NormalTok{ text.replace(}\StringTok{"Ö"}\NormalTok{,}\StringTok{"\&Ouml;"}\NormalTok{)}
-\NormalTok{        text }\OperatorTok{=}\NormalTok{ text.replace(}\StringTok{"ü"}\NormalTok{,}\StringTok{"\&uuml;"}\NormalTok{)}
-\NormalTok{        text }\OperatorTok{=}\NormalTok{ text.replace(}\StringTok{"Ü"}\NormalTok{,}\StringTok{"\&Uuml;"}\NormalTok{)}
-\NormalTok{        text }\OperatorTok{=}\NormalTok{ text.replace(}\StringTok{"ß"}\NormalTok{,}\StringTok{"\&szlig;"}\NormalTok{)}
-\NormalTok{        text }\OperatorTok{=}\NormalTok{ text.replace(}\StringTok{\textquotesingle{}}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{n\textquotesingle{}}\NormalTok{,}\StringTok{"\textless{}br\textgreater{}"}\NormalTok{)}
-\NormalTok{        text }\OperatorTok{=} \BuiltInTok{str}\NormalTok{(text)}
-\NormalTok{        text }\OperatorTok{=}\NormalTok{ text.removeprefix(}\StringTok{"b\textquotesingle{}\textless{}!DOCTYPE html\textgreater{}"}\NormalTok{).removesuffix(}\StringTok{"\textquotesingle{}"}\NormalTok{)}
-        \BuiltInTok{print}\NormalTok{(text)}
-
-\KeywordTok{def}\NormalTok{ get\_delay(date):}
-    \ControlFlowTok{try}\NormalTok{:}
-\NormalTok{        date }\OperatorTok{=}\NormalTok{ datetime.datetime.strptime(date, }\StringTok{\textquotesingle{}\%a, }\SpecialCharTok{\%d}\StringTok{ \%b \%Y \%H:\%M:\%S GMT\textquotesingle{}}\NormalTok{)}
-\NormalTok{        timeout }\OperatorTok{=} \BuiltInTok{int}\NormalTok{((date }\OperatorTok{{-}}\NormalTok{ datetime.datetime.now()).total\_seconds())}
-    \ControlFlowTok{except} \PreprocessorTok{ValueError}\NormalTok{:}
-\NormalTok{        timeout }\OperatorTok{=} \BuiltInTok{int}\NormalTok{(date)}
-    \ControlFlowTok{return}\NormalTok{ timeout}
-
-\KeywordTok{def}\NormalTok{ fetch\_image\_by\_url(url, headers):}
-\NormalTok{    r }\OperatorTok{=}\NormalTok{ requests.get(url, headers}\OperatorTok{=}\NormalTok{headers, stream}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
-    \ControlFlowTok{if}\NormalTok{ r.status\_code }\OperatorTok{==} \DecValTok{200}\NormalTok{:}
-\NormalTok{        im }\OperatorTok{=}\NormalTok{ Image.}\BuiltInTok{open}\NormalTok{(r.raw)}
-        \ControlFlowTok{return}\NormalTok{ im}
-    \ControlFlowTok{if}\NormalTok{ r.status\_code }\OperatorTok{==} \DecValTok{500}\NormalTok{:}
-        \ControlFlowTok{return} \VariableTok{None}
-    \ControlFlowTok{if}\NormalTok{ r.status\_code }\OperatorTok{==} \DecValTok{403}\NormalTok{:}
-        \ControlFlowTok{return} \VariableTok{None}
-    \ControlFlowTok{if}\NormalTok{ r.status\_code }\OperatorTok{==} \DecValTok{429}\NormalTok{:}
-\NormalTok{        timeout }\OperatorTok{=}\NormalTok{ get\_delay(r.headers[}\StringTok{\textquotesingle{}retry{-}after\textquotesingle{}}\NormalTok{])}
-        \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}Timeout }\SpecialCharTok{\{\}}\StringTok{ m }\SpecialCharTok{\{\}}\StringTok{ s\textquotesingle{}}\NormalTok{.}\BuiltInTok{format}\NormalTok{(timeout }\OperatorTok{//} \DecValTok{60}\NormalTok{, timeout }\OperatorTok{\%} \DecValTok{60}\NormalTok{))}
-\NormalTok{        time.sleep(timeout)}
-\NormalTok{        fetch\_image\_by\_url(url, headers)}
-
-\KeywordTok{def}\NormalTok{ get\_img(partOfItem\_id):}
-\NormalTok{    q }\OperatorTok{=} \StringTok{""}
-    \ControlFlowTok{if}\NormalTok{ partOfItem\_id:}
-\NormalTok{        q }\OperatorTok{=}\NormalTok{ query\_img.replace(}\StringTok{"\textless{}placeholder\textgreater{}"}\NormalTok{, }\StringTok{"?partOfStatement cpsps:P6 cps:"}\OperatorTok{+}\NormalTok{partOfItem\_id}\OperatorTok{+}\StringTok{"."}\NormalTok{)}
-    \ControlFlowTok{else}\NormalTok{:}
-\NormalTok{        q }\OperatorTok{=}\NormalTok{ query\_img.replace(}\StringTok{"\textless{}placeholder\textgreater{}"}\NormalTok{,}\StringTok{""}\NormalTok{)}
-\NormalTok{    results\_img }\OperatorTok{=}\NormalTok{ run\_query(endpoint\_url, q)}
-    \ControlFlowTok{for}\NormalTok{ item }\KeywordTok{in}\NormalTok{ results\_img[}\StringTok{"results"}\NormalTok{][}\StringTok{"bindings"}\NormalTok{]:    }
-      \CommentTok{\#print(item)}
-      \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}Wikibase link: \textquotesingle{}} \OperatorTok{+} \StringTok{\textquotesingle{}[\textquotesingle{}} \OperatorTok{+}\NormalTok{ item[}\StringTok{\textquotesingle{}imgItem\textquotesingle{}}\NormalTok{][}\StringTok{\textquotesingle{}value\textquotesingle{}}\NormalTok{] }\OperatorTok{+} \StringTok{\textquotesingle{}]\textquotesingle{}} \OperatorTok{+} \StringTok{\textquotesingle{}(\textquotesingle{}} \OperatorTok{+}\NormalTok{ item[}\StringTok{\textquotesingle{}imgItem\textquotesingle{}}\NormalTok{][}\StringTok{\textquotesingle{}value\textquotesingle{}}\NormalTok{] }\OperatorTok{+} \StringTok{\textquotesingle{})\textquotesingle{}} \OperatorTok{+} \StringTok{\textquotesingle{}}\CharTok{\textbackslash{}n}\StringTok{\textquotesingle{}}\NormalTok{)}
-      \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}Title: \textquotesingle{}} \OperatorTok{+}\NormalTok{ item[}\StringTok{\textquotesingle{}itemLabel\textquotesingle{}}\NormalTok{][}\StringTok{\textquotesingle{}value\textquotesingle{}}\NormalTok{] }\OperatorTok{+} \StringTok{\textquotesingle{}}\CharTok{\textbackslash{}n}\StringTok{\textquotesingle{}}\NormalTok{)}
-      \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}Year: \textquotesingle{}} \OperatorTok{+}\NormalTok{ item[}\StringTok{\textquotesingle{}publishDate\textquotesingle{}}\NormalTok{][}\StringTok{\textquotesingle{}value\textquotesingle{}}\NormalTok{] }\OperatorTok{+} \StringTok{\textquotesingle{}}\CharTok{\textbackslash{}n}\StringTok{\textquotesingle{}}\NormalTok{)}
-      \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}Description: \textquotesingle{}} \OperatorTok{+}\NormalTok{ html.unescape(item[}\StringTok{\textquotesingle{}itemDescr\textquotesingle{}}\NormalTok{][}\StringTok{\textquotesingle{}value\textquotesingle{}}\NormalTok{]) }\OperatorTok{+} \StringTok{\textquotesingle{}}\CharTok{\textbackslash{}n}\StringTok{\textquotesingle{}}\NormalTok{)}
-
-      \CommentTok{\# get image from image URL and display resized version}
-\NormalTok{      image\_url}\OperatorTok{=}\NormalTok{item[}\StringTok{\textquotesingle{}imgUrl\textquotesingle{}}\NormalTok{][}\StringTok{\textquotesingle{}value\textquotesingle{}}\NormalTok{]}
-\NormalTok{      headers }\OperatorTok{=}\NormalTok{ \{}\StringTok{\textquotesingle{}User{-}Agent\textquotesingle{}}\NormalTok{: }\StringTok{\textquotesingle{}Ex\_Books\_conference\_bot/0.0 (https://github.com/SimonXIX/Experimental\_Books\_workshop; ad7588@coventry.ac.uk)\textquotesingle{}}\NormalTok{\}}
-\NormalTok{      im }\OperatorTok{=}\NormalTok{ fetch\_image\_by\_url(image\_url, headers)}
-\NormalTok{      im.thumbnail((}\DecValTok{500}\NormalTok{, }\DecValTok{500}\NormalTok{), Image.Resampling.LANCZOS)}
-\NormalTok{      display(im)}
-      \BuiltInTok{print}\NormalTok{(}\StringTok{\textquotesingle{}}\CharTok{\textbackslash{}n\textbackslash{}n}\StringTok{\textquotesingle{}}\NormalTok{)}
-
-\KeywordTok{def}\NormalTok{ get\_graph():}
-    \ImportTok{import}\NormalTok{ VizKG.visualize }\ImportTok{as}\NormalTok{ vkg}
-\NormalTok{    results\_graph1 }\OperatorTok{=}\NormalTok{ run\_query(endpoint\_url, query\_graph)}
-    \CommentTok{\#print(results\_graph1)}
-    \CommentTok{\#print(\textquotesingle{}{-}{-}{-}\textquotesingle{})}
-\NormalTok{    results\_graph2 }\OperatorTok{=}\NormalTok{ run\_query(endpoint\_url, query\_graph2)}
-    \CommentTok{\#print(results\_graph2)}
-
-\NormalTok{    chart }\OperatorTok{=}\NormalTok{ vkg(sparql\_query}\OperatorTok{=}\NormalTok{query\_graph2, sparql\_service\_url}\OperatorTok{=}\NormalTok{endpoint\_url, chart}\OperatorTok{=}\StringTok{\textquotesingle{}wordcloud\textquotesingle{}}\NormalTok{)}
-\NormalTok{    chart.plot()}
-\end{Highlighting}
-\end{Shaded}
-
 \textbf{How to use your own text for processing}
 
 \begin{enumerate}
@@ -559,8 +383,8 @@ Description: Wolfgang Beringer, Baumeister und Steinmetz - Georg Stegle,
 Baumeister - Entwurf: Georges Robin, Architekt - Elias Gunzenhäuser,
 Zimmermann - Weikersheim, Marktplatz 11 - ab 1595
 
-\includegraphics{tafelstube_files/figure-pdf/cell-4-output-2.png}
-\includegraphics{tafelstube_files/figure-pdf/cell-4-output-3.png}
+\includegraphics{tafelstube_files/figure-pdf/cell-3-output-2.png}
+\includegraphics{tafelstube_files/figure-pdf/cell-3-output-3.png}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -595,7 +419,7 @@ Jagdzyklus an der Decke des Saals.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{tafelstube_files/figure-pdf/cell-6-output-1.png}
+\includegraphics{tafelstube_files/figure-pdf/cell-5-output-1.png}
 
 \bookmarksetup{startatroot}
 
@@ -818,6 +642,10 @@ Tottis}\label{belagerungsszene-i-eroberung-der-festung-tottis}
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{get\_text(}\StringTok{"Q252"}\NormalTok{)}
+\CommentTok{\#Belagerungsszene I}
+
+\NormalTok{get\_img(}\StringTok{"Q238"}\NormalTok{)}
+\CommentTok{\#Vestung Tottis}
 \end{Highlighting}
 \end{Shaded}
 
@@ -838,12 +666,6 @@ Totis nicht 1590, sondern 1597 und 1598 durch die Christen erobert
 wurde, und zudem zu den zeitlich als n\xc3\xa4chste dargestellten
 Belagerungen eine Zeitspanne von vier Jahren liegt, kann es gut sein,
 dass der Jahreszahl 1590 ein Versehen zugrunde liegt.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{get\_img(}\StringTok{"Q238"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 
 Wikibase link:
 \url{https://computational-publishing-service.wikibase.cloud/entity/Q265}
@@ -867,19 +689,92 @@ Description: Teil von: Wanddekoration des Flurs \& Raum 73a
 Belagerungsszenen und Türkenschlachten; Balthasar Kazenberger, Maler -
 Weikersheim, Schloss Weikersheim, Flur \& Raum 73a - 1603-1604
 
-\includegraphics{belagerung_01_files/figure-pdf/cell-4-output-2.png}
-\includegraphics{belagerung_01_files/figure-pdf/cell-4-output-3.png}
+\includegraphics{belagerung_01_files/figure-pdf/cell-3-output-2.png}
+\includegraphics{belagerung_01_files/figure-pdf/cell-3-output-3.png}
 
 \bookmarksetup{startatroot}
 
-\chapter{Belagerungsszene I: Eroberung der Festung
-Tottis}\label{belagerungsszene-i-eroberung-der-festung-tottis-1}
+\chapter{Belagerungsszene II: Belagerung der Festung
+Gran}\label{belagerungsszene-ii-belagerung-der-festung-gran}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \ImportTok{from}\NormalTok{ funktionen }\ImportTok{import} \OperatorTok{*}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{get\_text(}\StringTok{"Q253"}\NormalTok{)}
+\CommentTok{\#Belagerung II}
+
+\NormalTok{get\_img(}\StringTok{"Q239"}\NormalTok{)}
+\CommentTok{\#Vestung Gran}
+\end{Highlighting}
+\end{Shaded}
+
+Wikibase link:
+\url{https://computational-publishing-service.wikibase.cloud/entity/Q253}
+
+Kurator: Seeger, Ulrike
+
+Belagerung II: \xe2\x80\x9eVestung Gran wie die von Christen belegert
+gewesen. 1594\xe2\x80\x9c
+
+Schmales Format. Vorne links ein Hellebardier mit einem Knecht, der mit
+schwarzen Kugeln als Munition hantiert. Von rechts kommt dynamisch ein
+Reiter mit rotem Mantel, schwarzem Zylinder und m\xc3\xb6glicherweise
+einer Trompete im Arm ins Bild geritten. Da an der versuchten Einnahme
+von Gran (Eszergom) im Jahr 1594 Graf Georg Friedrich, der
+\xc3\xa4lteste Sohn von Graf Wolfgang II., als kaiserlicher Obrist
+beteiligt war,{[}1{]} darf man den Reiter im roten Mantel vermutlich mit
+diesem identifizieren. Sein Gesicht folgt mit hellem Teint, roten
+B\xc3\xa4ckchen, hoher Stirn, Schnauzbart und fein geschwungenen
+Augenbrauen dem des Grafen Wolfgang auf den Deckengem\xc3\xa4lden des
+Rittersaals mit dem Unterschied, dass es von dunkelbraunem Haar gerahmt
+wird.
+
+Im Mittelgrund blickt man auf das Feldlager der kaiserlichen Armee. Von
+einer Verschanzung in den Donauauen wird am
+gegen\xc3\xbcberliegenden Ufer die Wasserstadt von Gran beschossen.
+Dar\xc3\xbcber liegt die Festung Gran mit der Doppelturmfassade der
+Kathedrale. Mehrere Minarette deuten die t\xc3\xbcrkische Herrschaft an.
+Die Ansicht folgt nicht dem Kupferstich von Sibmacher, der Gran von
+einem anderen Blickwinkel und zudem summarischer zeigt. Ohnehin hat
+Sibmacher nicht die Belagerung des Jahres 1594, sondern die des Jahres
+1595 dargestellt. Da Georg Friedrich an dem Ereignis 1594 beteiligt war,
+d\xc3\xbcrfte die Weikersheimer Darstellung auf Flugbl\xc3\xa4tter oder
+bebilderte Zeitungsberichte zur\xc3\xbcckgehen, die es mannigfach zu den
+Ereignissen des Langen T\xc3\xbcrkenkriegs gab. Der von links mit einer
+Drehung ins Bild hineinreitende Reiter hat sein Vorbild in einem Stich
+von Stradanus zur Wolfsjagd (Nachdruck Olms, Tf. 20).
+
+{[}1{]} Trentin-Meyer, Georg Friedrich von Hohenlohe, 2019, S. 90.
+
+Wikibase link:
+\url{https://computational-publishing-service.wikibase.cloud/entity/Q266}
+
+Title: Belagerung der Festung Gran -- Gesamtansicht (1594)
+
+Year: 2018
+
+Description: Teil von: Wanddekoration des Flurs \& Raum 73a
+Belagerungsszenen und Türkenschlachten; Balthasar Kazenberger, Maler -
+Weikersheim, Schloss Weikersheim, Flur \& Raum 73a - 1603-1604
+
+Wikibase link:
+\url{https://computational-publishing-service.wikibase.cloud/entity/Q266}
+
+Title: Belagerung der Festung Gran -- Gesamtansicht (1594)
+
+Year: 2018-01-01T00:00:00Z
+
+Description: Teil von: Wanddekoration des Flurs \& Raum 73a
+Belagerungsszenen und Türkenschlachten; Balthasar Kazenberger, Maler -
+Weikersheim, Schloss Weikersheim, Flur \& Raum 73a - 1603-1604
+
+\includegraphics{belagerung_02_files/figure-pdf/cell-3-output-2.png}
+\includegraphics{belagerung_02_files/figure-pdf/cell-3-output-3.png}
 
 \bookmarksetup{startatroot}
 
