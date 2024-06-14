@@ -10,22 +10,22 @@ book:
   date: "2024-06-14"
   # this section determines which files will be added to the book as chapters
   chapters:
-    - index.qmd
-    - tafelstube.ipynb
-    - belagerungsszenen.ipynb
-    - belagerung_01.ipynb
-    - belagerung_02.ipynb
-    - belagerung_03.ipynb
-    - belagerung_04.ipynb
-    - belagerung_05.ipynb
-    - belagerung_06.ipynb
-    - belagerung_07.ipynb
-    - belagerung_08.ipynb
-    - belagerung_09.ipynb
-    - belagerung_10.ipynb
-    - belagerung_11.ipynb
-    - belagerung_12.ipynb
-    #Rename notebook to Tafelstube/room you are doing
+    - index.qmd 
+    - tafelstube.ipynb 
+    - part: belagerungsszenen.ipynb 
+      chapters:
+        - belagerung_01.ipynb 
+        - belagerung_02.ipynb
+        - belagerung_03.ipynb
+        - belagerung_04.ipynb
+        - belagerung_05.ipynb
+        - belagerung_06.ipynb
+        - belagerung_07.ipynb
+        - belagerung_08.ipynb
+        - belagerung_09.ipynb
+        - belagerung_10.ipynb
+        - belagerung_11.ipynb
+        - belagerung_12.ipynb
   repo-url: https://github.com/lenskatala/tafelstube-notebook
   repo-actions: [edit]                    #[issue] zum Fragestellen
   downloads: [pdf,docx,epub]
@@ -45,10 +45,14 @@ format:
     code-overflow: wrap
     # Quarto allows a number of pre-packaged themes for the HTML version
     # You can choose between them using the documentation at https://quarto.org/docs/output-formats/html-themes.html
-    theme: [sandstone, sandstone.scss]
+    theme: 
+      - sandstone
+      - sandstone.scss
   # options for PDF output 
   # https://quarto.org/docs/reference/formats/pdf.html
   pdf:
+    papersize: a4
+    classoption: portrait
     documentclass: book
   docx: 
     toc: true

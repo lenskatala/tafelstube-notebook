@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2024.6.13)  13 JUN 2024 19:53
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2024.6.13)  14 JUN 2024 12:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -461,6 +461,10 @@ Package caption Info: New subtype `subfigure' on input line 238.
 Package caption Info: New subtype `subtable' on input line 238.
 \c@subtable=\count331
 )
+
+LaTeX Warning: Unused global option(s):
+    [portrait].
+
 No file index.aux.
 \openout1 = `index.aux'.
 
@@ -820,10 +824,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 253--255
 l.262 \xc
          3\x96stlich an den Rittersaal schlie\xc3\x9ft ein gro\xc3\x9fer, 1837 
 Here is how much of TeX's memory you used:
- 20325 strings out of 476194
- 373681 string characters out of 5785289
+ 20326 strings out of 476194
+ 373692 string characters out of 5785289
  1922557 words of memory out of 5000000
- 42621 multiletter control sequences out of 15000+600000
+ 42622 multiletter control sequences out of 15000+600000
  564496 words of font info for 86 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  90i,6n,123p,1353b,414s stack positions out of 10000i,1000n,20000p,200000b,200000s
