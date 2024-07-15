@@ -64,7 +64,7 @@ SELECT ?x ?y
 WHERE
 {
   ?a cpsp:P2 ?c.
-  ?c cpsps:P2 ?d.                       #also quasi überall wo sparql ist, muss was angepasst werden
+  ?c cpsps:P2 ?d.                       
   ?a rdfs:label ?x.
   ?d rdfs:label ?y.
 
@@ -96,12 +96,12 @@ def get_text(textitem_id):
 
     results_txt = run_query(endpoint_url, q)
     for item in results_txt["results"]["bindings"]:
-        # print(item)
         print('Wikibase link: ' + '[' + item['textItem']['value'] + ']' + '(' + item['textItem']['value'] + ')' + '\n')
         print('Kurator: ' + item['kuratorLabel']['value'] + '\n')
         headers = {'User-Agent': 'Ex_Books_conference_bot/0.0 (https://github.com/SimonXIX/Experimental_Books_workshop; ad7588@coventry.ac.uk)'}
         r = requests.get(item['textUrl']['value'], headers=headers, stream=True)
-        text = str(r.content)
+        
+        text = str(r.text) ### CHANGED from r.content
         text = text.replace("ä","&auml;")
         text = text.replace("Ä","&Auml;")
         text = text.replace("ö","&ouml;")
@@ -111,7 +111,7 @@ def get_text(textitem_id):
         text = text.replace("ß","&szlig;")
         text = text.replace('\\n',"<br>")
         text = str(text)
-        text = text.removeprefix("b'<!DOCTYPE html>").removesuffix("'")
+        text = text.removeprefix("<!DOCTYPE html>") ### changed from "b'<!DOCTYPE html>"
         print(text)
 
 def get_delay(date):
