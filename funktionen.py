@@ -28,7 +28,7 @@ WHERE
   ?urlstatement cpsps:P57 ?textUrl. 
 }"""
 
-query_img = """PREFIX cps: <https://computational-publishing-service.wikibase.cloud/entity/>
+query_img ="""PREFIX cps: <https://computational-publishing-service.wikibase.cloud/entity/>
 PREFIX cpss: <https://computational-publishing-service.wikibase.cloud/entity/statement/>
 PREFIX cpsv: <https://computational-publishing-service.wikibase.cloud/value/>
 PREFIX cpspt: <https://computational-publishing-service.wikibase.cloud/prop/direct/>
@@ -36,22 +36,26 @@ PREFIX cpsp: <https://computational-publishing-service.wikibase.cloud/prop/>
 PREFIX cpsps: <https://computational-publishing-service.wikibase.cloud/prop/statement/>
 PREFIX cpspq: <https://computational-publishing-service.wikibase.cloud/prop/qualifier/>
 
-SELECT DISTINCT ?itemLabel ?itemDescr ?imgItem ?imgUrl ?publishDate 
+SELECT DISTINCT ?itemLabel ?itemDescr ?imgItem ?imgUrl ?publishDate
 WHERE
 {
   ?imgItem cpsp:P107 ?urlStatement. 
   ?urlStatement cpsps:P107 ?imgUrl. 
-  ?imgItem cpsp:P60 ?dateStatement.         
-  ?dateStatement cpsps:P60 ?publishDate.
+  ?imgItem cpsp:P60 ?dateStatement. 
+  ?dateStatement cpsps:P60 ?publishDate. 
   ?imgItem cpsp:P6 ?partOfStatement.
   ?partOfStatement cpsps:P6 ?partOfItem.
   <placeholder> 
+
+  FILTER (datatype(?publishDate) = xsd:edtf)
+  
   SERVICE wikibase:label {
-      bd:serviceParam wikibase:language "de,en".
+      bd:serviceParam wikibase:language "en,de".
       ?imgItem rdfs:label ?itemLabel.
       ?imgItem schema:description ?itemDescr.
     }
 }"""
+
 query_graph = """PREFIX cps: <https://computational-publishing-service.wikibase.cloud/entity/>
 PREFIX cpss: <https://computational-publishing-service.wikibase.cloud/entity/statement/>
 PREFIX cpsv: <https://computational-publishing-service.wikibase.cloud/value/>
