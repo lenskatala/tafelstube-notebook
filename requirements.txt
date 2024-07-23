@@ -12,3 +12,4 @@ plotly
 pillow
 thothlibrary==0.16.0
 VizKG
+markdownify

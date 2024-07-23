@@ -7,9 +7,13 @@ project:
 book:
   title: "Die Tafelstube"
   author: "Lena-Marie Hoppe"
-  date: "2024-06-14"
+  sidebar: 
+    style: docked
+    background: light
+    search: true
+  date: "2024-07-31"
   # this section determines which files will be added to the book as chapters
-  chapters:
+  chapters: 
     - index.qmd 
     - tafelstube.ipynb 
     - part: belagerungsszenen.ipynb 
@@ -27,7 +31,7 @@ book:
         - belagerung_11.ipynb
         - belagerung_12.ipynb
   repo-url: https://github.com/lenskatala/tafelstube-notebook
-  repo-actions: [edit]                    #[issue] zum Fragestellen
+  repo-actions: [source]                    #[edit,issue,source] 
   downloads: [pdf,docx,epub]
   cover-image: images/fmd10005852a.jpg    
 
@@ -45,15 +49,14 @@ format:
     code-overflow: wrap
     # Quarto allows a number of pre-packaged themes for the HTML version
     # You can choose between them using the documentation at https://quarto.org/docs/output-formats/html-themes.html
-    theme: 
-      - sandstone
-      - sandstone.scss
+    theme: [sandstone, sandstone.scss]
   # options for PDF output 
   # https://quarto.org/docs/reference/formats/pdf.html
   pdf:
     papersize: a4
     classoption: portrait
     documentclass: book
+    number-sections: false
   docx: 
     toc: true
   epub: 

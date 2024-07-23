@@ -1,8 +1,10 @@
 # Katalog zur Ausstellung: Die Tafelstube
 
-Ein Katalog mit Kunstwerken aus der CbDD-Sammlung. Textteil: [6e73f774-4b7f-4e37-937b-e11cc35c5bc8](https://www.deckenmalerei.eu/42d06165-58e7-4653-bfe4-3d5f7091fc33#6e73f774-4b7f-4e37-937b-e11cc35c5bc8)
+### Ein Katalog mit Kunstwerken aus der CbDD-Sammlung. 
+Textteil: [6e73f774-4b7f-4e37-937b-e11cc35c5bc8](https://www.deckenmalerei.eu/42d06165-58e7-4653-bfe4-3d5f7091fc33#7fb9a718-7e18-4053-81d9-3689f3f65548)
 
-Die Tafelstube (Belagerungsszenen des Langen Türkenkriegs an der Decke) [Raum]<br/>
+<b>Raum:</b> Die Tafelstube (Belagerungsszenen des Langen Türkenkriegs an der Decke)<br/>
+<br/>
 
 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://licensebuttons.net/l/by-nc-nd/4.0/88x31.png" /></a> This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International License</a>.
 

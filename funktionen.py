@@ -5,6 +5,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 import requests
 from PIL import Image
 import html
+from markdownify import markdownify
 
 endpoint_url = "https://computational-publishing-service.wikibase.cloud/query/sparql"
 #where the sparql queries come from
@@ -106,18 +107,8 @@ def get_text(textitem_id):
         r = requests.get(item['textUrl']['value'], headers=headers, stream=True)
         
         text = str(r.text) ### CHANGED from r.content
-        text = text.replace("ä","&auml;")
-        text = text.replace("Ä","&Auml;")
-        text = text.replace("ö","&ouml;")
-        text = text.replace("Ö","&Ouml;")
-        text = text.replace("Ó", "&Oacute;")
-        text = text.replace("ü","&uuml;")
-        text = text.replace("Ü","&Uuml;")
-        text = text.replace("ß","&szlig;")
-        text = text.replace('\\n',"<br>")
-        text = str(text)
         text = text.removeprefix("<!DOCTYPE html>") ### changed from "b'<!DOCTYPE html>"
-        print(text)
+        print(markdownify(text)) #CHANGED
 
 def get_delay(date):
     try:
