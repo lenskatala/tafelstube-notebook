@@ -110,6 +110,7 @@ def get_text(textitem_id):
         text = text.replace("Ä","&Auml;")
         text = text.replace("ö","&ouml;")
         text = text.replace("Ö","&Ouml;")
+        text = text.replace("Ó", "&Oacute;")
         text = text.replace("ü","&uuml;")
         text = text.replace("Ü","&Uuml;")
         text = text.replace("ß","&szlig;")
