@@ -114,10 +114,10 @@ def get_text(textitem_id):
         markdown_text = markdownify(text)
 
         # Fußnoten im Fließtext umwandeln
-        markdown_text = re.sub(r'\[(\d+)\]', r'[^\1]', markdown_text)
+        # markdown_text = re.sub(r'\[(\d+)\]', r'[^\1]', markdown_text)
         
         # Fußnotenliste am Ende des Dokuments umwandeln und Leerzeichen entfernen
-        markdown_text = re.sub(r'\n \[\^(\d+)\]', r'\n[^\1]:', markdown_text)
+        # markdown_text = re.sub(r'\n \[\^(\d+)\]', r'\n[^\1]:', markdown_text)
 
         print(markdown_text)
 
