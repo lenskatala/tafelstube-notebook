@@ -5,6 +5,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 import requests
 from PIL import Image
 import html
+import re
 from markdownify import markdownify
 
 endpoint_url = "https://computational-publishing-service.wikibase.cloud/query/sparql"
@@ -108,7 +109,17 @@ def get_text(textitem_id):
         
         text = str(r.text) ### CHANGED from r.content
         text = text.removeprefix("<!DOCTYPE html>") ### changed from "b'<!DOCTYPE html>"
-        print(markdownify(text)) #CHANGED
+
+        # Konvertiere HTML zu Markdown
+        markdown_text = markdownify(text)
+
+        # Fußnoten im Fließtext umwandeln
+        markdown_text = re.sub(r'\[(\d+)\]', r'[^\1]', markdown_text)
+        
+        # Fußnotenliste am Ende des Dokuments umwandeln und Leerzeichen entfernen
+        markdown_text = re.sub(r'\n \[\^(\d+)\]', r'\n[^\1]:', markdown_text)
+
+        print(markdown_text)
 
 def get_delay(date):
     try:
